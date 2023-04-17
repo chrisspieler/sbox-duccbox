@@ -39,7 +39,12 @@ partial class SandboxPlayer : Player
 
 		SetModel( "models/citizen/citizen.vmdl" );
 
-		Controller = new WalkController();
+		var walkController = new WalkController();
+
+		walkController.DefaultSpeed = 80f;
+		walkController.SprintSpeed = 150f;
+
+		Controller = walkController;
 
 		if ( DevController is NoclipController )
 		{

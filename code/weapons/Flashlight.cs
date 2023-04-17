@@ -7,7 +7,7 @@ partial class Flashlight : Weapon
 	public override string ViewModelPath => "weapons/rust_flashlight/v_rust_flashlight.vmdl";
 	public override float SecondaryRate => 2.0f;
 
-	protected virtual Vector3 LightOffset => Vector3.Forward * -5;
+	protected virtual Vector3 LightOffset => Vector3.Forward * 20;
 
 	private SpotLightEntity worldLight;
 	private SpotLightEntity viewLight;
@@ -34,7 +34,7 @@ partial class Flashlight : Weapon
 		base.CreateViewModel();
 
 		viewLight = CreateLight();
-		viewLight.SetParent( ViewModelEntity, "light", new Transform( LightOffset ) );
+		viewLight.SetParent( ViewModelEntity, "light", new Transform( Vector3.Forward * -70f ) );
 		viewLight.EnableViewmodelRendering = true;
 		viewLight.Enabled = LightEnabled;
 	}
