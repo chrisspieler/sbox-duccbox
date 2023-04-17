@@ -27,16 +27,17 @@ partial class SandboxGame : GameManager
 		base.OnDestroy();
 	}
 
-	// TODO - delete me
 	[ConCmd.Admin( "giveall" )]
 	public static void GiveAll()
 	{
 		var player = ConsoleSystem.Caller.Pawn as SandboxPlayer;
 
+		player.Inventory.Add( new PhysGun(), true );
+		player.Inventory.Add( new GravGun() );
+		player.Inventory.Add( new Tool() );
 		player.Inventory.Add( new Pistol() );
-		player.Inventory.Add( new SMG() );
-		player.Inventory.Add( new Shotgun() );
-		player.Inventory.Add( new RPG() );
+		player.Inventory.Add( new Flashlight() );
+		player.Inventory.Add( new Fists() );
 	}
 
 	[ConCmd.Server( "spawn" )]

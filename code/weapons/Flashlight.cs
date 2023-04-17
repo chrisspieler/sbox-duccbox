@@ -7,7 +7,7 @@ partial class Flashlight : Weapon
 	public override string ViewModelPath => "weapons/rust_flashlight/v_rust_flashlight.vmdl";
 	public override float SecondaryRate => 2.0f;
 
-	protected virtual Vector3 LightOffset => Vector3.Forward * 10;
+	protected virtual Vector3 LightOffset => Vector3.Forward * -5;
 
 	private SpotLightEntity worldLight;
 	private SpotLightEntity viewLight;

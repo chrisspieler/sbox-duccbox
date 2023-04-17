@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Linq;
 using System.Numerics;
 
 partial class SandboxPlayer : Player
@@ -52,13 +53,6 @@ partial class SandboxPlayer : Player
 		EnableShadowInFirstPerson = true;
 
 		Clothing.DressEntity( this );
-
-		Inventory.Add( new PhysGun(), true );
-		Inventory.Add( new GravGun() );
-		Inventory.Add( new Tool() );
-		Inventory.Add( new Pistol() );
-		Inventory.Add( new Flashlight() );
-		Inventory.Add( new Fists() );
 
 		base.Respawn();
 	}
@@ -152,7 +146,7 @@ partial class SandboxPlayer : Player
 
 		if ( Input.Released( InputButton.Jump ) )
 		{
-			if ( timeSinceJumpReleased < 0.3f )
+			if ( timeSinceJumpReleased < 0.6f )
 			{
 				if ( DevController is NoclipController )
 				{
@@ -263,6 +257,25 @@ partial class SandboxPlayer : Player
 	public override float FootstepVolume()
 	{
 		return Velocity.WithZ( 0 ).Length.LerpInverse( 0.0f, 200.0f ) * 5.0f;
+	}
+
+	[ConCmd.Server("weapon_add")]
+	public static void AddWeapon(string weaponName )
+	{
+		var player = ConsoleSystem.Caller.Pawn as Player;
+		var candidates = TypeLibrary.GetTypes<Weapon>()
+			.Where( t => t.ClassName.ToLower() == weaponName.ToLower() );
+		if ( !candidates.Any() )
+		{
+			Log.Info( "Could not find weapon: " + weaponName );
+			return;
+		}
+		else
+		{
+			Log.Info( $"{player.Client} equipping weapon: {weaponName}" );
+		}
+		var weapon = candidates.First();
+		player.Inventory.Add( weapon.Create<Weapon>(), true );
 	}
 
 	[ConCmd.Server( "inventory_current" )]
