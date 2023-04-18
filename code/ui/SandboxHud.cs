@@ -1,9 +1,12 @@
 ﻿using Sandbox;
 using Sandbox.UI;
+using System.Runtime.CompilerServices;
 
 [Library]
 public partial class SandboxHud : HudEntity<RootPanel>
 {
+	private static SandboxHud Instance;
+
 	public SandboxHud()
 	{
 		if ( !Game.IsClient )
@@ -21,5 +24,25 @@ public partial class SandboxHud : HudEntity<RootPanel>
 		RootPanel.AddChild<CurrentTool>();
 		RootPanel.AddChild<SpawnMenu>();
 		RootPanel.AddChild<Crosshair>();
+
+		Instance = this;
+	}
+
+	[ConCmd.Client( "hud_enable" )]
+	public static void EnableHud(bool shouldEnable)
+	{
+		if ( Instance == null )
+		{
+			Log.Info( "No HUD exists" );
+			return;
+		}
+		if ( shouldEnable )
+		{
+			Instance.RootPanel.SetClass( "disabled", false );
+		}
+		else
+		{
+			Instance.RootPanel.SetClass( "disabled", true );
+		}
 	}
 }

@@ -73,6 +73,11 @@ rootpanel
     {
         display: none;
     }
+
+    &.disabled 
+    {
+        display: none;
+    }
 }
 
 icon, iconpanel

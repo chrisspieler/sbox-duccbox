@@ -4,6 +4,11 @@ using System.Numerics;
 
 partial class SandboxPlayer : Player
 {
+	[ConVar.Replicated( "player_walk_speed" )]
+	public static float WalkSpeed { get; set; } = 80f;
+	[ConVar.Replicated( "player_sprint_speed" )]
+	public static float SprintSpeed { get; set; } = 150f;
+
 	private TimeSince timeSinceDropped;
 	private TimeSince timeSinceJumpReleased;
 
@@ -41,8 +46,8 @@ partial class SandboxPlayer : Player
 
 		var walkController = new WalkController();
 
-		walkController.DefaultSpeed = 80f;
-		walkController.SprintSpeed = 150f;
+		walkController.DefaultSpeed = WalkSpeed;
+		walkController.SprintSpeed = SprintSpeed;
 
 		Controller = walkController;
 
@@ -264,23 +269,35 @@ partial class SandboxPlayer : Player
 		return Velocity.WithZ( 0 ).Length.LerpInverse( 0.0f, 200.0f ) * 5.0f;
 	}
 
-	[ConCmd.Server("weapon_add")]
-	public static void AddWeapon(string weaponName )
+	[ConCmd.Server( "weapon_add" )]
+	public static void AddWeapon( string weaponName )
 	{
 		var player = ConsoleSystem.Caller.Pawn as Player;
-		var candidates = TypeLibrary.GetTypes<Weapon>()
-			.Where( t => t.ClassName.ToLower() == weaponName.ToLower() );
+		AddInventoryItem<Weapon>( weaponName, player );
+	}
+
+	[ConCmd.Server("carriable_add")]
+	public static void AddCarriable(string carriableName )
+	{
+		var player = ConsoleSystem.Caller.Pawn as Player;
+		AddInventoryItem<Carriable>(carriableName, player);
+	}
+
+	public static void AddInventoryItem<T>(string entityName, Player player) where T : Entity
+	{
+		var candidates = TypeLibrary.GetTypes<T>()
+			.Where( t => t.ClassName.ToLower() == entityName.ToLower() );
 		if ( !candidates.Any() )
 		{
-			Log.Info( "Could not find weapon: " + weaponName );
+			Log.Info( "Could not find entity class name: " + entityName );
 			return;
 		}
 		else
 		{
-			Log.Info( $"{player.Client} equipping weapon: {weaponName}" );
+			Log.Trace( $"{player.Client} granted entity: {entityName}" );
 		}
-		var weapon = candidates.First();
-		player.Inventory.Add( weapon.Create<Weapon>(), true );
+		var entity = candidates.First();
+		player.Inventory.Add( entity.Create<T>(), true );
 	}
 
 	[ConCmd.Server( "inventory_current" )]
