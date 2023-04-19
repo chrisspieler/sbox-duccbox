@@ -8,6 +8,8 @@ partial class SandboxPlayer : Player
 	public static float WalkSpeed { get; set; } = 80f;
 	[ConVar.Replicated( "player_sprint_speed" )]
 	public static float SprintSpeed { get; set; } = 150f;
+	[ConVar.Replicated( "player_footstep_volume_factor" )]
+	public static float FootstepVolumeFactor { get; set; } = 20.0f;
 
 	private TimeSince timeSinceDropped;
 	private TimeSince timeSinceJumpReleased;
@@ -266,7 +268,7 @@ partial class SandboxPlayer : Player
 
 	public override float FootstepVolume()
 	{
-		return Velocity.WithZ( 0 ).Length.LerpInverse( 0.0f, 200.0f ) * 5.0f;
+		return Velocity.WithZ( 0 ).Length.LerpInverse( 0f, 200.0f ) * FootstepVolumeFactor;
 	}
 
 	[ConCmd.Server( "weapon_add" )]

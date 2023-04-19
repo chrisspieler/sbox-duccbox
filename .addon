@@ -1,5 +1,5 @@
 {
-  "Title": "Super Ducc Test",
+  "Title": "Duccbox",
   "Type": "game",
   "Org": "duccsoft",
   "Ident": "super_ducc_test",
@@ -15,11 +15,13 @@
   "PackageReferences": [],
   "EditorReferences": null,
   "Metadata": {
-    "MapList": [],
+    "MapList": [
+      "duccsoft.tunnels"
+    ],
     "PerMapRanking": false,
     "LeaderboardType": "None",
     "RankType": "None",
-    "MapSelect": "Unrestricted",
+    "MapSelect": "Tagged",
     "GameNetworkType": "Multiplayer",
     "MaxPlayers": 64,
     "MinPlayers": 1,
@@ -120,7 +122,7 @@
     "DefaultLeaderboards": null,
     "Summary": "",
     "Description": "",
-    "Public": false,
+    "Public": true,
     "ReplaceTags": "",
     "CsProjName": "",
     "ParentPackage": "facepunch.sandbox",
